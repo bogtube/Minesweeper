@@ -2,7 +2,7 @@
 #include <cmath>
 #include "Spielfeld.h"
 #include "SetUpMines.h"
-#include "ActionOnClick.h"                                            // hier kommen dann die anderen Klassen hin
+#include "ActionOnClick.h"
 #include "Anzeige.h"
 #include "CountMinesEx.h"
 
@@ -26,53 +26,62 @@ bool checkSieg(int x, int y, Spielfeld& spielfeld){
 
 void feldAufdecken(int x, int y, Spielfeld& spielfeld){
   spielfeld.setSichtbar(x, y);
-  cout << "Feld [" << x << "][" << y << "] wurde entblößt" << spielfeld.getFeld()[x][y] << "\n";
+  cout << "Feld [" << x << "][" << y << "] wurde entblößt: " << spielfeld.getFeld()[x][y] << "\n";
 }
 
 int main(){
-Spielfeld spielfeld;
-Anzeige anzeige;
+  Spielfeld spielfeld;
+  Anzeige anzeige;
 
-  int eingabeHoehe = 15;
-  int eingabeBreite = 15;
-  int schwierigkeit = 15;
+  int eingabeHoehe, eingabeBreite, schwierigkeit;
+
+  // --- STARTMENÜ ---
+  cout << "=== MINESWEEPER ===\n";
+  cout << "Hoehe: ";
+  cin >> eingabeHoehe;
+  cout << "Breite: ";
+  cin >> eingabeBreite;
+  cout << "Schwierigkeit in Prozent (1-99, z.B. 15): ";
+  cin >> schwierigkeit;
 
   spielfeld.initialisierungSpielfeld(eingabeHoehe, eingabeBreite); 
   placeMines(eingabeHoehe, eingabeBreite, schwierigkeit, spielfeld);
-  //placeNumbers(eingabeHoehe, eingabeBreite, spielfeld);
+  countMines(eingabeHoehe, eingabeBreite, spielfeld);
 
   bool gameOver = false;
   char aktion;
   int x, y;
 
+  // --- GAME LOOP ---
   while(!gameOver){
+    cout << "\033[2J\033[1;1H"; 
+
     anzeige.zeichneSpielfeld(spielfeld);
 
-    cout << "Aktion wählen (a = aufdecken, f = flagge): ";
-    cin >> aktion;
-    cout << "X-Koordinate: (Spalte 0-" << eingabeBreite - 1 << "): ";
-    cin >> x;
-    cout << "X-Koordinate: (Zeile 0-" << eingabeHoehe - 1 << "): ";
-    cin >> y;
+    cout << "\nEingabe (Format: [a/f] [X] [Y] -> z.B. 'a 2 4'): ";                              // weil ich zu faul war mich mit der TUI oder Cursor ausseinander zu setzten, deswegen 3 inputs in 1--> damit schnell
+    cin >> aktion >> x >> y;
+
+    if (x < 0 || x >= eingabeBreite || y < 0 || y >= eingabeHoehe) {                            // Safty first oder so 
+        cout << "Koordinaten ausserhalb des Spielfelds! Versuch es nochmal.\n";
+        continue; 
+    }
 
     if(aktion == 'a'){
       if(checkNiederlage(x, y, spielfeld)){
         cout << "\n Bamm! bist auf eine Mine drauf. GAME OVER! \n";
         gameOver = true;
       }else{
-        feldAufdecken(x, y, spielfeld);
-        if(checkSieg(x, y, spielfeld)){
-          cout << "Gewonnen!! Uhu, gut gemacht.";
+        FillEmptySpace(y, x, spielfeld);
+        if(checkSieg(y, x, spielfeld)){
+          cout << "Gewonnen!! Uhu, gut gemacht.\n";
           gameOver = true;
         }
       }
     }else if(aktion == 'f'){
-      //TODO flaggen logik implementieren Maxi!
-      cout << "Flagge auf " << x << ", " << y << "\n";
+      spielfeld.toggleFlagge(y, x);
     }else{
-      cout << "Gib was richtiges ein du kek. (a oder f)";
+      cout << "Gib was richtiges ein du kek. ('a' oder 'f' als erstes Zeichen)\n";
     }
-
   }
 
   return 0;

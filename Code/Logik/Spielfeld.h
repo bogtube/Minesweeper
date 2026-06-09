@@ -9,6 +9,7 @@ private:
     int anzahlBomben = 0;
 
     bool** sichtbar;
+    bool** flagge;
 
     char** feld = nullptr;
 
@@ -24,6 +25,8 @@ public:
     void bauSpielfeld(int hoehe, int breite);
     void initialisierungSpielfeld(int h, int b);
 
+    void toggleFlagge(int x, int y);
+    bool hatFlagge(int x, int y);
 
     bool istSichtbar(int x, int y);
     

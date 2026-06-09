@@ -3,7 +3,6 @@
 #include <stdexcept>
 
 
-
 int countMinesAroundTarget(int posX, int posY, Spielfeld& field){
     int amountOfMines = 0;
     char** myField = field.getFeld(); 
@@ -22,8 +21,8 @@ int countMinesAroundTarget(int posX, int posY, Spielfeld& field){
 
 void countMines(int SizeX, int SizeY, Spielfeld& field){
     char** myField = field.getFeld();
-    for(int i = 1; i < SizeX - 1; i++){
-        for(int j = 1; j < SizeY - 1; j++){
+    for(int i = 0; i < SizeX; i++){
+        for(int j = 0; j < SizeY; j++){
             if(!isMine(i,j,field)){
                 myField[i][j] = countMinesAroundTarget(i,j,field) + '0';
             }
@@ -32,6 +31,9 @@ void countMines(int SizeX, int SizeY, Spielfeld& field){
 }
 
 bool isMine(int posX, int posY, Spielfeld& field){
-    char** myField = field.getFeld();
-    return myField[posX][posY] == 'M';
+  if(posX < 0 || posX >= field.getHoehe() || posY < 0 || posY >= field.getBreite()) {
+    return false;
+  }
+  char** myField = field.getFeld();
+  return myField[posX][posY] == 'M';
 }

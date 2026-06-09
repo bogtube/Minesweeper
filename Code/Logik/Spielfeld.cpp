@@ -17,9 +17,12 @@ Spielfeld::~Spielfeld(){
     for(int i = 0; i < hoehe; i++) {
             delete[] feld[i];
             delete[] sichtbar[i];
+            delete[] flagge[i];
         }
         delete[] feld;
-        delete[] sichtbar;  }
+        delete[] sichtbar;  
+        delete[] flagge;
+  }
 }
 
 void Spielfeld::initialisierungSpielfeld(int h, int b){
@@ -28,13 +31,16 @@ void Spielfeld::initialisierungSpielfeld(int h, int b){
 
   feld = new char*[hoehe];
   sichtbar = new bool*[hoehe];
+  flagge = new bool*[hoehe];
 
   for(int i = 0; i < hoehe; i++) {
     feld[i] = new char[breite];
-      sichtbar[i] = new bool[breite]; // Zeile für Zeile reservieren
+    sichtbar[i] = new bool[breite]; // Zeile für Zeile reservieren
+    flagge[i] = new bool[breite];
         for(int j = 0; j < breite; j++) {
           feld[i][j] = ' ';
-            sichtbar[i][j] = false;
+          sichtbar[i][j] = false;
+          flagge[i][j] = false;
     }
   }
 }
@@ -84,4 +90,19 @@ bool Spielfeld::istSichtbar(int x, int y) {
     return false;
 }
 
+void Spielfeld::toggleFlagge(int x, int y) {
+    if(x >= 0 && x < hoehe && y >= 0 && y < breite) {
+                                                                      // Flagge nur setzen/entfernen, wenn das Feld noch verdeckt ist
+        if(!sichtbar[x][y]) { 
+            flagge[x][y] = !flagge[x][y];
+        }
+    }
+}
+
+bool Spielfeld::hatFlagge(int x, int y) {
+    if(x >= 0 && x < hoehe && y >= 0 && y < breite) {
+        return flagge[x][y];
+    }
+    return false;
+}
 

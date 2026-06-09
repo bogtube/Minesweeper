@@ -21,8 +21,8 @@ void randomPlacement(int SizeX, int SizeY, Spielfeld& field){
     
     random_device rd;
     mt19937 gen(rd());
-    uniform_int_distribution<> distX(0,SizeX);
-    uniform_int_distribution<> distY(0,SizeY);
+    uniform_int_distribution<> distX(0,SizeX - 1);
+    uniform_int_distribution<> distY(0,SizeY - 1);
 
     while(true){
         int PosX = distX(gen);

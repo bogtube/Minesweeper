@@ -1,3 +1,6 @@
+cmake_minimum_required(VERSION 3.10)
+project(Minesweeper)
+
 add_executable(minesweeper
     main.cpp
     Logik/ActionOnClick.cpp
