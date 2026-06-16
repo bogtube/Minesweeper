@@ -1,41 +1,7 @@
-# Plan für Minesweeper in C++ 
+# Minesweeper für's Terminal: 
+ein im Terminal lebendes Minispiel was 
 
-Ein im Terminal lebendes Mini-Spiel was [Am Ende] als eine TUI Fenster gespielt werden kann.
-Die Minesweeper-Regeln werden in der Anfangsphase nicht geändert jedoch nimmt mann sich nicht die Möglichkeit
-für verschiedene Game Modi.
+<img width="1026" height="376" alt="image" src="https://github.com/user-attachments/assets/7c481bfc-d974-4d6e-bac6-d2ec15415116" />
 
----
-## Schlachtplan / Aufgabenpool:
-- Game-Loop while(!hameOver) oder so                                            ✓
-- Sichtbares und Unsichtbares Feld (2d-Array für Spieler und für Spiel)         ✓
-- Nachbarzahl eines Feldes berechnen                                            ✓
-- Engabe                                                                        -
-- Game-Loop beenden (Win/Lose)
+<img width="1013" height="543" alt="image" src="https://github.com/user-attachments/assets/c7da63fa-397d-4331-a1df-5a3db72fb680" />
 
----
-<img width="610" height="487" alt="image" src="https://github.com/user-attachments/assets/7535b021-a1b1-46d4-acac-332bb73ca23a" />
-
-
-### Befehl um alles im Terminal zu compilieren!
-
-g++ main.cpp Logik/*.cpp Optik/*.cpp -o minesweeper
-
----
-
-### To-Do [B]
-
-  - Menu / (T)erminal (I)nterface machen!
-
----
-
-### To-Do [M]
-
-  - Noch mehr Minen smoothMinen()  (bessere Sicherheit für die Schwierigkeit)
-  - update deine To-Do Maxi
-
-_______________
-
-Wer suchet der findet,
-wer drauftritt der verschwindet
-                    -Felix Piel
-_______________
