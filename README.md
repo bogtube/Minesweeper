@@ -13,6 +13,8 @@ für verschiedene Game Modi.
 - Game-Loop beenden (Win/Lose)
 
 ---
+<img width="610" height="487" alt="image" src="https://github.com/user-attachments/assets/7535b021-a1b1-46d4-acac-332bb73ca23a" />
+
 
 ### Befehl um alles im Terminal zu compilieren!
 
