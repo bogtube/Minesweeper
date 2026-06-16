@@ -15,18 +15,47 @@ int checkNachbarn(int x, int y, Spielfeld& spielfeld){
   return wert - '0';
 }
 
-bool checkNiederlage(int x, int y, Spielfeld& spielfeld){
-  return spielfeld.getFeld()[x][y] == 'M';
+bool checkNiederlage(int y, int x, Spielfeld& spielfeld){
+  return spielfeld.getFeld()[y][x] == 'M';
 }
 
-bool checkSieg(int x, int y, Spielfeld& spielfeld){
-  // TODO einfach nur gucken wie viele Felder noch frei sind
-  return false;
+bool checkSieg(Spielfeld& spielfeld){
+  int h = spielfeld.getHoehe();
+  int b = spielfeld.getBreite();
+  char** feld = spielfeld.getFeld();
+  
+  for(int i = 0; i < h; i++){
+    for(int j = 0; j < b; j++){
+      if(feld[i][j] != 'M' && !spielfeld.istSichtbar(i, j)){
+        return false; 
+      }
+    }
+  }
+  return true; 
+}
+
+int berechneScore(Spielfeld& spielfeld) {
+    int score = 0;
+    int h = spielfeld.getHoehe();
+    int b = spielfeld.getBreite();
+    char** feld = spielfeld.getFeld();
+    
+    for(int i = 0; i < h; i++) {
+        for(int j = 0; j < b; j++) {
+            if(spielfeld.istSichtbar(i, j) && feld[i][j] != 'M') {
+                score += 10;
+                if(feld[i][j] >= '1' && feld[i][j] <= '8') {
+                    score += (feld[i][j] - '0') * 5; 
+                }
+            }
+        }
+    }
+    return score;
 }
 
 void feldAufdecken(int x, int y, Spielfeld& spielfeld){
   spielfeld.setSichtbar(x, y);
-  cout << "Feld [" << x << "][" << y << "] wurde entblößt: " << spielfeld.getFeld()[x][y] << "\n";
+  cout << "Feld [" << x << "][" << y << "] wurde entbloesst: " << spielfeld.getFeld()[x][y] << "\n";
 }
 
 int main(){
@@ -36,13 +65,7 @@ int main(){
   int eingabeHoehe, eingabeBreite, schwierigkeit;
 
   // --- STARTMENÜ ---
-  cout << "=== MINESWEEPER ===\n";
-  cout << "Hoehe: ";
-  cin >> eingabeHoehe;
-  cout << "Breite: ";
-  cin >> eingabeBreite;
-  cout << "Schwierigkeit in Prozent (1-99, z.B. 15): ";
-  cin >> schwierigkeit;
+  anzeige.zeichneMenu(eingabeHoehe, eingabeBreite, schwierigkeit);
 
   spielfeld.initialisierungSpielfeld(eingabeHoehe, eingabeBreite); 
   placeMines(eingabeHoehe, eingabeBreite, schwierigkeit, spielfeld);
@@ -54,26 +77,30 @@ int main(){
 
   // --- GAME LOOP ---
   while(!gameOver){
-    cout << "\033[2J\033[1;1H"; 
+    
+    int aktuellerScore = berechneScore(spielfeld);
+    anzeige.zeichneSpielfeld(spielfeld, aktuellerScore);
 
-    anzeige.zeichneSpielfeld(spielfeld);
-
-    cout << "\nEingabe (Format: [a/f] [X] [Y] -> z.B. 'a 2 4'): ";                              // weil ich zu faul war mich mit der TUI oder Cursor ausseinander zu setzten, deswegen 3 inputs in 1--> damit schnell
+    anzeige.zeigeEinzug(eingabeBreite);
+    cout << "Eingabe (Format: [a/f] [Spalte/X] [Zeile/Y] -> z.B. 'a 2 4'): ";                              
     cin >> aktion >> x >> y;
 
-    if (x < 0 || x >= eingabeBreite || y < 0 || y >= eingabeHoehe) {                            // Safty first oder so 
-        cout << "Koordinaten ausserhalb des Spielfelds! Versuch es nochmal.\n";
+    if (x < 0 || x >= eingabeBreite || y < 0 || y >= eingabeHoehe) {                            
+        cout << "\033[91mKoordinaten ausserhalb des Spielfelds! Versuch es nochmal.\033[0m\n";
         continue; 
     }
 
     if(aktion == 'a'){
-      if(checkNiederlage(x, y, spielfeld)){
-        cout << "\n Bamm! bist auf eine Mine drauf. GAME OVER! \n";
+      if(checkNiederlage(y, x, spielfeld)){
+        spielfeld.setSichtbar(y, x);
+        anzeige.zeichneSpielfeld(spielfeld, aktuellerScore);
+        cout << "\n \033[91mBamm! Bist auf eine Mine getreten. GAME OVER!\033[0m \n";
         gameOver = true;
       }else{
         FillEmptySpace(y, x, spielfeld);
-        if(checkSieg(y, x, spielfeld)){
-          cout << "Gewonnen!! Uhu, gut gemacht.\n";
+        if(checkSieg(spielfeld)){
+          anzeige.zeichneSpielfeld(spielfeld, berechneScore(spielfeld));
+          cout << "\n \033[92mGewonnen!! Uhu, gut gemacht.\033[0m\n";
           gameOver = true;
         }
       }
