@@ -41,17 +41,12 @@ Ein kommandozeilenbasiertes Minesweeper-Spiel in C++.
 Nach dem Start des Programms werden Sie gebeten, die Parameter für das Spielfeld (Höhe, Breite) sowie den Schwierigkeitsgrad (in Prozent) einzugeben.
 Steuerung
 
+<img width="1013" height="543" alt="image" src="https://github.com/user-attachments/assets/c7da63fa-397d-4331-a1df-5a3db72fb680" />
+
 Die Eingabe der Züge erfolgt über die Tastatur nach folgendem Format:
 [Aktion] [X-Koordinate (Spalte)] [Y-Koordinate (Zeile)]
 
-    Feld aufdecken (a): Beispiel: a 4 2 (deckt das Feld in Spalte 4, Zeile 2 auf)
-
-    Flagge setzen / entfernen (f): Beispiel: f 5 5 (markiert das Feld in Spalte 5, Zeile 5 mit einer Flagge oder entfernt diese wieder)
-
-Spielziel
-
+Spielziel:
 Das Spiel ist gewonnen, wenn alle Felder, die keine Minen enthalten, aufgedeckt wurden. Das Spiel ist verloren, sobald ein Feld mit einer Mine aufgedeckt wird.
    
-
-<img width="1013" height="543" alt="image" src="https://github.com/user-attachments/assets/c7da63fa-397d-4331-a1df-5a3db72fb680" />
 
